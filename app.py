@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 # Sample user data
 users = [
-    {'name': 'Alice', 'email': 'alice@example.com', 'age': 30},
-    {'name': 'Bob', 'email': 'bob@example.com', 'age': 25},
-    {'name': 'Charlie', 'email': 'charlie@example.com', 'age': 35},
+    {'name': 'vijay', 'email': 'alice@example.com', 'age': 18},
+    {'name': 'Bobi', 'email': 'bob@example.com', 'age': 25},
+    {'name': 'pradeep', 'email': 'charlie@example.com', 'age': 19},
 ]
 
 @app.route('/')
