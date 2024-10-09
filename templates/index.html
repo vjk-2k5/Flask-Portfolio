@@ -10,6 +10,30 @@
     <div class="container">
         <h1>Welcome to My Flask App!</h1>
         <p>This is a simple Flask application with HTML and CSS.</p>
+        
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+            </ul>
+        </nav>
+
+        <h2>Basic Calculator</h2>
+        <form method="POST" action="{{ url_for('calculate') }}">
+            <input type="number" name="num1" placeholder="First Number" required>
+            <input type="number" name="num2" placeholder="Second Number" required>
+            <select name="operation" required>
+                <option value="add">+</option>
+                <option value="subtract">-</option>
+                <option value="multiply">*</option>
+                <option value="divide">/</option>
+            </select>
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if result is not none %}
+            <h3>Result: {{ result }}</h3>
+        {% endif %}
     </div>
 </body>
 </html>
