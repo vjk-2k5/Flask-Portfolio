@@ -2,6 +2,13 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# Sample user data
+users = [
+    {'name': 'Alice', 'email': 'alice@example.com', 'age': 30},
+    {'name': 'Bob', 'email': 'bob@example.com', 'age': 25},
+    {'name': 'Charlie', 'email': 'charlie@example.com', 'age': 35},
+]
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -9,6 +16,10 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html', users=users)
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
@@ -32,3 +43,4 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
