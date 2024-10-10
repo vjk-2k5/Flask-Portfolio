@@ -12,6 +12,9 @@ users = [
 @app.route('/')
 def home():
     return render_template('index.html')
+@app.route('/sk')
+def sk():
+     return render_template('santhosh.html')
 
 @app.route('/about')
 def about():
