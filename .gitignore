@@ -1,4 +1,34 @@
-venv/
-__pycache__/
-.vscode/
+# Python
 *.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Flask specific files
+instance/
+*.db
+
+# Virtual environment
+venv/
+ENV/
+env/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Static files (if they are built/compiled)
+static/css/*.css
+static/js/*.js
+
+# Log files
+*.log
+
+# Miscellaneous
+*.DS_Store
+Thumbs.db
+
+# Pytest
+.cache

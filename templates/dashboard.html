@@ -3,39 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2; /* Light grey background */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center elements horizontally */
+            justify-content: center; /* Center elements vertically */
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+        }
+
+        h1 {
+            color: #333; /* Dark grey color */
+            margin-bottom: 20px; /* Space below heading */
+        }
+
+        p {
+            font-size: 18px; /* Increase font size for welcome message */
+            color: #555; /* Slightly lighter grey for text */
+            margin-bottom: 30px; /* Space below paragraph */
+        }
+
+        a {
+            padding: 10px 20px; /* Add padding around link */
+            background-color: #007BFF; /* Bootstrap primary color */
+            color: white; /* White text */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        a:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        /* Optional: Add responsive styles for smaller screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px; /* Smaller heading on small screens */
+            }
+            p {
+                font-size: 16px; /* Smaller text on small screens */
+            }
+            a {
+                padding: 8px 16px; /* Adjust button size on small screens */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>User Dashboard</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-            </ul>
-        </nav>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Age</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.age }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ user.username }}!</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>
+

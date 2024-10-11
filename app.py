@@ -1,68 +1,75 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, redirect, url_for, request, session
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///model.db'  # Database URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'your_secret_key_here'  # Needed for session management
 
-# Sample user data
-users = [
-    {'name': 'vijay', 'email': 'alice@example.com', 'age': 18},
-    {'name': 'Bobi', 'email': 'bob@example.com', 'age': 25},
-    {'name': 'pradeep', 'email': 'charlie@example.com', 'age': 19},
-]
+db = SQLAlchemy(app)
+
+# User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
+# Create the database and tables
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def home():
-    return render_template('index.html')
-@app.route('/sk')
-def sk():
-     return render_template('santhosh.html')
+    return render_template('home.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    error_message = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check if the user already exists
+        if User.query.filter_by(username=username).first():
+            error_message = 'User already exists!'
+        else:
+            # Create new user
+            new_user = User(username=username, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        
+    return render_template('signup.html', error_message=error_message)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error_message = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        user = User.query.filter_by(username=username, password=password).first()
+        
+        if user:
+            session['user_id'] = user.id
+            return redirect(url_for('dashboard'))
+        else:
+            error_message = 'Invalid username or password.'
+    
+    return render_template('login.html', error_message=error_message)
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html', users=users)
-@app.route('/newhtml')
-def newhtml(): 
-    return render_template('new.html')
-
-@app.route('/calculate', methods=['POST'])
-def calculate():
-    if request.method == 'POST':
-        num1 = request.form.get('num1', type=float)
-        num2 = request.form.get('num2', type=float)
-        operation = request.form.get('operation')
-
-        if operation == 'add':
-            result = num1 + num2
-        elif operation == 'subtract':
-            result = num1 - num2
-        elif operation == 'multiply':
-            result = num1 * num2
-        elif operation == 'divide':
-            result = num1 / num2 if num2 != 0 else "Error: Division by zero"
-        else:
-            result = "Invalid operation"
-        
-        return render_template('index.html', result=result)
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     
-    
-@app.route('/factorial', methods=['POST'])
-def find():
-    if request.method=='POST':
-          num1 = request.form.get('num1', type=int)
-          
-    def factorial(n):
-       if n == 0:
-        return 1
-       else:
-        return n * factorial(n-1)
-       
-    result=factorial(num1)
-    return render_template('new.html',result=result)
-             
+    user = User.query.get(session['user_id'])
+    return render_template('dashboard.html', user=user)
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
-
