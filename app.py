@@ -23,6 +23,9 @@ def about():
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', users=users)
+@app.route('/newhtml')
+def newhtml(): 
+    return render_template('new.html')
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
@@ -30,7 +33,7 @@ def calculate():
         num1 = request.form.get('num1', type=float)
         num2 = request.form.get('num2', type=float)
         operation = request.form.get('operation')
-        
+
         if operation == 'add':
             result = num1 + num2
         elif operation == 'subtract':
@@ -43,8 +46,23 @@ def calculate():
             result = "Invalid operation"
         
         return render_template('index.html', result=result)
+    
+    
+@app.route('/factorial', methods=['POST'])
+def find():
+    if request.method=='POST':
+          num1 = request.form.get('num1', type=int)
+          
+    def factorial(n):
+       if n == 0:
+        return 1
+       else:
+        return n * factorial(n-1)
+       
+    result=factorial(num1)
+    return render_template('new.html',result=result)
+             
 
 if __name__ == '__main__':
     app.run(debug=True)
 
-#commentbysanthosh
