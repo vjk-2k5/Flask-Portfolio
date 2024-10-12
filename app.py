@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey"  # Required for flashing messages
 
 # Sample user data
 users = [
-    {'name': 'vijay', 'email': 'alice@example.com', 'age': 18},
-    {'name': 'Bobi', 'email': 'bob@example.com', 'age': 25},
-    {'name': 'pradeep', 'email': 'charlie@example.com', 'age': 19},
+    {'name': 'vijay', 'email': 'vijay@example.com', 'age': 18},
+    {'name': 'Bobi', 'email': 'bobi@example.com', 'age': 25},
+    {'name': 'pradeep', 'email': 'pradeep@example.com', 'age': 19},
 ]
 
 @app.route('/')
@@ -20,6 +21,22 @@ def about():
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', users=users)
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/submit_contact', methods=['POST'])
+def submit_contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        
+        # In a real-world app, you would store the message or send an email
+        flash(f'Thank you, {name}! Your message has been received.')
+        
+        return redirect(url_for('contact'))
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
@@ -43,4 +60,3 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
